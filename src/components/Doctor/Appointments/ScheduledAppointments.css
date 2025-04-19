@@ -1,0 +1,54 @@
+.appointments-section {
+  background-color: #f0f4f8;
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  max-width: 800px;
+  margin: 20px auto;
+}
+
+.appointments-section h4 {
+  margin-bottom: 15px;
+  color: #333;
+}
+
+.appointments-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.appointment-item {
+  background-color: #4ecdc4; /* Consistent color for all boxes */
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  padding: 10px; /* Reduced padding */
+  flex: 1 1 22%; /* Reduced width for smaller boxes */
+  margin: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px; /* Reduced gap */
+  color: #fff; /* Text color for contrast */
+}
+
+.appointment-detail {
+  display: flex;
+  justify-content: space-between;
+}
+
+.label {
+  font-weight: bold;
+}
+
+.value {
+  color: #fff;
+}
+
+.loading,
+.error {
+  text-align: center;
+  font-size: 1.2rem;
+  margin: 20px;
+}

@@ -1,0 +1,110 @@
+.doctor-dashboard {
+  font-family: Arial, sans-serif;
+  padding: 20px;
+}
+
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #007bff;
+  padding: 15px 20px;
+  color: white;
+}
+
+.logo {
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+.navbar-buttons {
+  display: flex;
+  gap: 15px;
+}
+
+.navbar-buttons button {
+  background-color: #ffffff;
+  color: #007bff;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 15px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.navbar-buttons button:hover {
+  background-color: #f0f0f0;
+}
+
+.logout-button {
+  background-color: #dc3545;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 15px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.logout-button:hover {
+  background-color: #c82333;
+}
+
+.welcome-message {
+  margin: 20px 0;
+}
+
+.appointments-section {
+  background-color: #ffffff;
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.time-slots-section {
+  margin-top: 20px;
+}
+
+.time-slots-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 20px;
+}
+
+.time-slot-card {
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  padding: 15px;
+  background-color: #f9f9f9;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.time-slot-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.slot-date {
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.slot-time {
+  color: #555;
+}
+.welcome-message {
+  margin: 20px 0; /* Add some vertical spacing */
+  text-align: center; /* Center the text */
+  background-color: #e0f7fa; /* Light cyan background for emphasis */
+  border-radius: 8px; /* Rounded corners */
+  padding: 15px; /* Padding for space around the text */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+}
+
+.welcome-message h3 {
+  color: #00796b; /* Teal color for the text */
+  font-size: 24px; /* Larger font size for emphasis */
+  font-weight: bold; /* Bold text for prominence */
+  margin: 0; /* Remove default margin */
+}

@@ -1,0 +1,100 @@
+/* src/components/auth/Login/Login.css */
+
+.login-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background: linear-gradient(to right, #4facfe, #00f2fe);
+  font-family: 'Arial', sans-serif; /* Use a clean, modern font */
+}
+
+.login-box {
+  width: 100%;
+  max-width: 400px;
+  padding: 40px; /* Increased padding for a more spacious feel */
+  background-color: white;
+  border-radius: 12px; /* Slightly more rounded corners */
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2); /* Deeper shadow for depth */
+  text-align: center;
+}
+
+.login-box h2 {
+  margin-bottom: 20px; /* Increased margin for better spacing */
+  font-size: 2rem; /* Larger font size for the title */
+  color: #333;
+  font-weight: 600; /* Bolder font weight */
+}
+
+.login-box p {
+  margin-bottom: 20px;
+  font-size: 0.9rem; /* Slightly smaller font size for less important text */
+  color: #666; /* Softer color for less emphasis */
+}
+
+.input-group {
+  margin-bottom: 25px; /* Increased margin for better spacing */
+  text-align: left;
+}
+
+.input-group label {
+  display: block;
+  margin-bottom: 8px; /* Increased margin for better spacing */
+  font-weight: 500; /* Medium font weight for labels */
+  color: #444; /* Darker color for better readability */
+}
+
+.input-group select,
+.input-group input {
+  width: 100%;
+  padding: 12px; /* Increased padding for comfort */
+  border: 1px solid #ccc;
+  border-radius: 6px; /* Slightly more rounded corners */
+  font-size: 1rem;
+  transition: border-color 0.3s ease; /* Smooth transition for focus */
+}
+
+.input-group input:focus,
+.input-group select:focus {
+  border-color: #4facfe; /* Highlight border on focus */
+  outline: none; /* Remove default outline */
+}
+
+.login-button {
+  width: 100%;
+  padding: 12px;
+  background-color: #4facfe;
+  border: none;
+  border-radius: 6px; /* Slightly more rounded corners */
+  color: white;
+  font-size: 1rem;
+  font-weight: bold; /* Bold text for emphasis */
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease; /* Added transform for button effect */
+}
+
+.login-button:hover {
+  background-color: #00c6ff;
+  transform: translateY(-2px); /* Slight lift effect on hover */
+}
+
+.error-text {
+  color: #ff4d4d; /* Red color for error messages */
+  margin-bottom: 20px; /* Space below error message */
+}
+
+.forgot-password,
+.sign-up {
+  margin-top: 15px; /* Space above links */
+  font-size: 0.9rem; /* Slightly smaller font size */
+}
+
+.link {
+  color: #007bff;
+  text-decoration: none;
+  font-weight: 500; /* Medium font weight for links */
+}
+
+.link:hover {
+  text-decoration: underline;
+}

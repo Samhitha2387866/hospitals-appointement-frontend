@@ -1,0 +1,44 @@
+/* Container for the entire profile section */
+.profile-container {
+    background-color: #f9f9f9; /* Light grey background for subtle contrast */
+    border-radius: 8px; /* Rounded corners for a modern look */
+    padding: 30px; /* Increased padding for more space */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Soft shadow for depth */
+    max-width: 700px; /* Increased max-width for larger content */
+    margin: 30px auto; /* Centered alignment with more vertical spacing */
+}
+
+/* Header styling for the profile section */
+.profile-container h2 {
+    margin-bottom: 25px; /* Increased space below the header */
+    color: #333; /* Dark grey color for text */
+    text-align: center; /* Centered text alignment */
+    font-weight: 600; /* Slightly bolder text for emphasis */
+    font-size: 28px; /* Increased font size for the header */
+}
+
+/* Container for the profile details */
+.profile-details {
+    background-color: #fff; /* White background for clarity */
+    border-radius: 8px; /* Consistent rounded corners */
+    padding: 20px; /* Increased padding for spacing */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+    display: flex;
+    flex-direction: column; /* Align items vertically */
+    gap: 15px; /* Increased space between each item */
+}
+
+/* Paragraph styling within the profile details */
+.profile-details p {
+    margin: 0; /* Remove default margin */
+    color: #555; /* Medium grey color for text */
+    line-height: 1.8; /* Improved readability with line height */
+    font-size: 18px; /* Increased font size for details */
+}
+
+/* Styling for emphasized text within paragraphs */
+.profile-details strong {
+    color: #007bff; /* Blue color for emphasis */
+    font-weight: 500; /* Medium weight for distinction */
+    font-size: 18px; /* Match font size with paragraph text */
+}
