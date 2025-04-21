@@ -33,10 +33,6 @@ function Profile({ patientData }) {
             <div className="detail-label">Gender</div>
             <div className="detail-value">{patientData?.gender}</div>
           </div>
-          <div className="detail-box">
-            <div className="detail-label">Age</div>
-            <div className="detail-value">{patientData?.age}</div>
-          </div>
         </div>
       </div>
     </div>

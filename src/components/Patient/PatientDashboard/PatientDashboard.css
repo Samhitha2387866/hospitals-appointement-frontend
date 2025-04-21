@@ -1,4 +1,3 @@
-/* components/patient/PatientDashboard/PatientDashboard.css */
 .patient-dashboard {
   min-height: 100vh;
   background-color: #f5f5f5;
@@ -138,6 +137,32 @@ button:hover {
   background-color: #0056b3;
 }
 
+.marquee-container {
+  overflow: hidden;
+  white-space: nowrap;
+  background: linear-gradient(90deg, #00c6ff, #0072ff); /* Blue gradient colors */
+  padding: 10px 0;
+  border-radius: 5px;
+  margin-bottom: 20px;
+}
+
+.marquee-text {
+  display: inline-block;
+  padding-left: 100%;
+  animation: marquee 15s linear infinite;
+  color: white; /* White text color */
+  font-weight: bold;
+  font-size: 1.0rem; /* Adjust font size as needed */
+}
+
+@keyframes marquee {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-100%);
+  }
+}
 @media (max-width: 768px) {
   .dashboard-content {
     margin-left: 0;

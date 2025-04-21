@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import "./SignUp.css";
- 
+
 const SignUp = () => {
   const [patientName, setPatientName] = useState("");
   const [dateOfBirth, setDateOfBirth] = useState("");
@@ -13,11 +13,17 @@ const SignUp = () => {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const navigate = useNavigate();
- 
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
- 
+
+    // Client-side validation (example)
+    if (!/^\S+@\S+\.\S+$/.test(email)) {
+      setError("Invalid email format");
+      return;
+    }
+
     try {
       await axios.post("https://localhost:7130/api/PatientRegistration", {
         patientName,
@@ -27,20 +33,20 @@ const SignUp = () => {
         gender,
         email,
         passwordHash: password, // Assuming password is hashed on the server side
-        role: "patient" // Set role directly here
+        role: "patient"
       });
- 
+
       alert("Registration successful!");
       navigate("/login");
     } catch (error) {
       setError(error.response?.data?.message || "Registration failed");
     }
   };
- 
+
   return (
     <div className="signup-container">
       <div className="signup-box">
-        <h2>Sign Up</h2>
+        <h2>Register</h2>
         {error && <p className="error-text">{error}</p>}
         <form onSubmit={handleSubmit}>
           <div className="input-group">
@@ -112,7 +118,5 @@ const SignUp = () => {
     </div>
   );
 };
- 
+
 export default SignUp;
- 
- 
