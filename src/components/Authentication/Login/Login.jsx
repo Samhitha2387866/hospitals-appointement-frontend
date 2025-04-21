@@ -16,7 +16,8 @@ const Login = () => {
     setIsLoading(true);
 
     try {
-      const response = await fetch("https://localhost:7130/api/Authentication/login", {
+      // First, authenticate the user
+      const loginResponse = await fetch("https://localhost:7130/api/Authentication/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -28,18 +29,28 @@ const Login = () => {
         })
       });
 
-      const data = await response.json();
-      console.log('Login response:', data); // Debugging line
+      const loginData = await loginResponse.json();
 
-      if (!response.ok) {
-        throw new Error(data.message || "Login failed");
+      if (!loginResponse.ok) {
+        throw new Error(loginData.message || "Login failed");
       }
 
-      if (!data.token) {
-        throw new Error("Token not received from server");
+      // After successful authentication, verify user type
+      const verifyUserType = await fetch(`https://localhost:7130/api/${userType === 'patient' ? 'PatientRegistration' : 'DoctorRegistration'}`, {
+        headers: {
+          'Authorization': `Bearer ${loginData.token}`,
+          'Accept': 'application/json'
+        }
+      });
+
+      const userData = await verifyUserType.json();
+      const user = userData.find(u => u.email.toLowerCase() === email.toLowerCase());
+
+      if (!user) {
+        throw new Error(`No ${userType} account found with this email`);
       }
 
-      localStorage.setItem("token", data.token);
+      localStorage.setItem("token", loginData.token);
       localStorage.setItem("userEmail", email);
       localStorage.setItem("userType", userType);
 

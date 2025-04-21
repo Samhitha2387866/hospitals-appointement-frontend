@@ -1,14 +1,14 @@
 .navbar {
-  background-color: #007bff;
-  padding: 10px 20px;
   display: flex;
   justify-content: space-between;
   align-items: center;
+  background-color: #007bff;
+  padding: 15px 20px;
   color: white;
 }
 
 .navbar-brand {
-  font-size: 1.5em;
+  font-size: 1.5rem;
   font-weight: bold;
 }
 
@@ -17,30 +17,30 @@
   display: flex;
   margin: 0;
   padding: 0;
+  gap: 15px; /* Space between buttons */
 }
 
 .navbar-list li {
-  margin-right: 20px;
+  margin: 0;
 }
 
 .navbar-list li button {
-  background: none;
+  background-color: #ffffff;
+  color: #007bff;
   border: none;
-  color: white;
-  font-size: 16px;
-  cursor: pointer;
-  padding: 5px 10px;
   border-radius: 5px;
+  padding: 10px 15px;
+  cursor: pointer;
   transition: background-color 0.3s;
 }
 
 .navbar-list li button:hover {
-  background-color: #0056b3;
+  background-color: #f0f0f0;
 }
 
 .logout-button {
-  background-color: #dc3545;
-  color: white;
+  background-color: #dc3545 !important; /* Ensure red background */
+  color: white !important; /* Ensure white text */
   border: none;
   border-radius: 5px;
   padding: 10px 15px;
@@ -50,12 +50,4 @@
 
 .logout-button:hover {
   background-color: #c82333;
-}
-
-.welcome-message {
-  background-color: #e0f7fa;
-  padding: 5px 10px;
-  border-radius: 5px;
-  color: #007bff;
-  font-weight: bold;
 }

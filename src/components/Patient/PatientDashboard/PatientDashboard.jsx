@@ -1,4 +1,3 @@
-// src/components/patient/PatientDashboard/PatientDashboard.jsx
 import React, { useState, useEffect } from 'react';
 import './PatientDashboard.css';
 import { useNavigate } from 'react-router-dom';
@@ -31,7 +30,14 @@ function PatientDashboard() {
       const userType = localStorage.getItem('userType');
       const userEmail = localStorage.getItem('userEmail');
 
-      if (!token || !userEmail || userType !== 'patient') {
+      if (!token || !userEmail) {
+        navigate('/login');
+        return;
+      }
+
+      // First, verify that this is actually a patient
+      if (userType !== 'patient') {
+        localStorage.clear();
         navigate('/login');
         return;
       }
@@ -44,14 +50,19 @@ function PatientDashboard() {
           }
         });
 
-        if (!patientResponse.ok) throw new Error('Failed to fetch patient details');
+        if (!patientResponse.ok) {
+          throw new Error('Failed to fetch patient details');
+        }
 
         const patientsData = await patientResponse.json();
         const patient = patientsData.find(p => p.email.toLowerCase() === userEmail.toLowerCase());
 
         if (!patient) {
-          throw new Error('Patient not found');
+          localStorage.clear();
+          navigate('/login');
+          throw new Error('Patient account not found');
         }
+
         setPatientData(patient);
         
         setAppointmentData(prev => ({
@@ -71,8 +82,10 @@ function PatientDashboard() {
         setDoctors(doctorsData);
 
       } catch (err) {
+        localStorage.clear();
         setError(err.message);
         console.error('Error:', err);
+        navigate('/login');
       } finally {
         setLoading(false);
       }

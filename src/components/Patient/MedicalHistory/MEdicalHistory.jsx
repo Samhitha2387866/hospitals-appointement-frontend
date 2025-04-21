@@ -11,10 +11,19 @@ function MedicalHistory({ patientId }) {
     const fetchMedicalHistory = async () => {
       try {
         const response = await fetch(`https://localhost:7130/api/MedicalHistory/ByPatient/${patientId}`);
-        if (!response.ok) throw new Error('Failed to fetch medical history');
+        
+        if (response.status === 404) {
+          setMedicalHistory([]);
+          return;
+        }
+
+        if (!response.ok) {
+          throw new Error('An error occurred while fetching medical history');
+        }
+
         const data = await response.json();
         console.log('Fetched data:', data);
-        setMedicalHistory(data);
+        setMedicalHistory(Array.isArray(data) ? data : []);
       } catch (err) {
         setError(err.message);
         console.error('Error fetching data:', err);
@@ -22,7 +31,13 @@ function MedicalHistory({ patientId }) {
         setLoading(false);
       }
     };
-    fetchMedicalHistory();
+
+    if (patientId) {
+      fetchMedicalHistory();
+    } else {
+      setLoading(false);
+      setError('Invalid patient ID');
+    }
   }, [patientId]);
 
   const formatDate = (dateString) => {
@@ -30,27 +45,47 @@ function MedicalHistory({ patientId }) {
     return isNaN(date) ? 'Invalid Date' : date.toLocaleDateString();
   };
 
-  if (loading) return <div>Loading...</div>;
-  if (error) return <div>Error: {error}</div>;
+  if (loading) {
+    return (
+      <div className="medical-history">
+        <div className="loading-spinner">Loading...</div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="medical-history">
+        <div className="error-message">
+          <h2>Error</h2>
+          <p>{error}</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="medical-history">
       <h2>Medical History</h2>
-      <ul>
-        {medicalHistory.length > 0 ? (
-          medicalHistory.map((item) => (
-            <li key={item.id}>
-              <p>Patient Name: {item.patientName}</p>
-              <p>Doctor ID: {item.doctorId}</p>
-              <p>Visit Date: {formatDate(item.visitDate)}</p>
-              <p>Treatment: {item.treatment}</p>
-              <p>Medicines Prescribed: {item.medicines_prescribed}</p>
+      {medicalHistory.length > 0 ? (
+        <ul className="history-list">
+          {medicalHistory.map((item) => (
+            <li key={item.id} className="history-item">
+              <div className="history-card">
+                <p><strong>Patient Name:</strong> {item.patientName}</p>
+                <p><strong>Doctor ID:</strong> {item.doctorId}</p>
+                <p><strong>Visit Date:</strong> {formatDate(item.visitDate)}</p>
+                <p><strong>Treatment:</strong> {item.treatment}</p>
+                <p><strong>Medicines Prescribed:</strong> {item.medicines_prescribed}</p>
+              </div>
             </li>
-          ))
-        ) : (
-          <p>No medical history available.</p>
-        )}
-      </ul>
+          ))}
+        </ul>
+      ) : (
+        <div className="no-history-message">
+          <p>No medical history available for this patient.</p>
+        </div>
+      )}
     </div>
   );
 }

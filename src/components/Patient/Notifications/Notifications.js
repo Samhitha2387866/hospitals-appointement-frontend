@@ -11,10 +11,19 @@ function Notifications({ patientId }) {
     const fetchNotifications = async () => {
       try {
         const response = await fetch(`https://localhost:7130/api/Notifications/patient/${patientId}`);
-        if (!response.ok) throw new Error('Failed to fetch notifications');
+        
+        if (response.status === 404) {
+          setNotifications([]);
+          return;
+        }
+
+        if (!response.ok) {
+          throw new Error('An error occurred while fetching notifications');
+        }
+
         const data = await response.json();
         console.log('Fetched data:', data);
-        setNotifications(data);
+        setNotifications(Array.isArray(data) ? data : []);
       } catch (err) {
         setError(err.message);
         console.error('Error fetching data:', err);
@@ -22,7 +31,13 @@ function Notifications({ patientId }) {
         setLoading(false);
       }
     };
-    fetchNotifications();
+
+    if (patientId) {
+      fetchNotifications();
+    } else {
+      setLoading(false);
+      setError('Invalid patient ID');
+    }
   }, [patientId]);
 
   const formatDate = (dateString) => {
@@ -30,26 +45,51 @@ function Notifications({ patientId }) {
     return isNaN(date) ? 'Invalid Date' : date.toLocaleDateString();
   };
 
-  if (loading) return <div>Loading...</div>;
-  if (error) return <div>Error: {error}</div>;
+  const formatTime = (timeString) => {
+    if (!timeString) return 'Not specified';
+    return timeString.substring(0, 5); // Format HH:mm
+  };
+
+  if (loading) {
+    return (
+      <div className="notifications">
+        <div className="loading-spinner">Loading...</div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="notifications">
+        <div className="error-message">
+          <h2>Error</h2>
+          <p>{error}</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="notifications">
       <h2>Notifications</h2>
-      <ul>
-        {notifications.length > 0 ? (
-          notifications.map((item) => (
-            <li key={item.notificationId}>
-              <p>Appointment ID: {item.appointmentId}</p>
-              <p>Doctor ID: {item.doctorId}</p>
-              <p>Appointment Date: {formatDate(item.appointmentDate)}</p>
-              <p>Appointment Time: {item.appointmentTime}</p>
+      {notifications.length > 0 ? (
+        <ul className="notifications-list">
+          {notifications.map((item) => (
+            <li key={item.notificationId} className="notification-item">
+              <div className="notification-card">
+                <p><strong>Appointment ID:</strong> {item.appointmentId}</p>
+                <p><strong>Doctor ID:</strong> {item.doctorId}</p>
+                <p><strong>Appointment Date:</strong> {formatDate(item.appointmentDate)}</p>
+                <p><strong>Appointment Time:</strong> {formatTime(item.appointmentTime)}</p>
+              </div>
             </li>
-          ))
-        ) : (
-          <p>No notifications available.</p>
-        )}
-      </ul>
+          ))}
+        </ul>
+      ) : (
+        <div className="no-notifications-message">
+          <p>No notifications available at this time.</p>
+        </div>
+      )}
     </div>
   );
 }

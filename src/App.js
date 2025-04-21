@@ -3,14 +3,15 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Home from "./components/Home/Home";
 import Login from "./components/Authentication/Login/Login";
 import Signup from "./components/Authentication/SignUp/SignUp";
-import ForgotPassword from "./components/Authentication/ForgotPassword/ForgotPassword";
 import PatientDashboard from "./components/Patient/PatientDashboard/PatientDashboard";
 import BookAppointment from "./components/Patient/BookAppointment/BookAppointment";
 import MedicalHistory from "./components/Patient/MedicalHistory/MEdicalHistory";
 import Profile from "./components/common/Profile/Profile";
 import DoctorDashboard from "./components/Doctor/DoctorDashboard/DoctorDashboard";
 import ProtectedRoute from "./components/common/ProtectedRoute/ProtectedRoute";
-import DoctorProfile from "./components/Doctor/DoctorProfile/DoctorProfile"; 
+import DoctorProfile from "./components/Doctor/DoctorProfile/DoctorProfile";
+import PrivacyPolicy from "./components/PrivacyPolicy/PrivacyPolicy";
+import TermsOfService from "./components/TermsOfService/TermsOfService";
 
 const router = createBrowserRouter([
   {
@@ -24,10 +25,6 @@ const router = createBrowserRouter([
   {
     path: "/signup",
     element: <Signup />,
-  },
-  {
-    path: "/forgot-password",
-    element: <ForgotPassword />,
   },
   {
     path: "/patient-dashboard",
@@ -92,6 +89,14 @@ const router = createBrowserRouter([
         <DoctorProfile />
       </ProtectedRoute>
     ),
+  },
+  {
+    path: "/privacy",
+    element: <PrivacyPolicy />,
+  },
+  {
+    path: "/terms",
+    element: <TermsOfService />,
   },
   {
     path: "*",
