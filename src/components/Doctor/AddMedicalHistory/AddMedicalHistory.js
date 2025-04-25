@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import './AddMedicalHistory.css';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 function AddMedicalHistory() {
   const location = useLocation();
@@ -54,10 +56,11 @@ function AddMedicalHistory() {
         throw new Error('Failed to add medical history');
       }
 
-      setStatus({
-        message: 'Medical history added successfully!',
-        type: 'success'
-      });
+      // setStatus({
+      //   message: 'Medical history added successfully!',
+      //   type: 'success'
+      // });
+      toast.success('Medical history added successfully!');
 
       // Redirect immediately after success
       navigate(-1);

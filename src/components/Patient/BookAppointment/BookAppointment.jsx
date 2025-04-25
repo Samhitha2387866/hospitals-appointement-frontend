@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import './BookAppointment.css';
-
+ 
 function BookAppointment({ appointmentData, setAppointmentData, handleBookAppointment }) {
   const [doctors, setDoctors] = useState([]);
   const [slots, setSlots] = useState([]);
   const [loadingDoctors, setLoadingDoctors] = useState(false);
   const [loadingSlots, setLoadingSlots] = useState(false);
   const [selectedDoctor, setSelectedDoctor] = useState(null);
-
+ 
   // Fetch doctors when date changes
   useEffect(() => {
     if (appointmentData.appointmentDate) {
@@ -23,7 +23,7 @@ function BookAppointment({ appointmentData, setAppointmentData, handleBookAppoin
     }
     // eslint-disable-next-line
   }, [appointmentData.appointmentDate]);
-
+ 
   // Fetch slots when doctor changes
   useEffect(() => {
     if (appointmentData.doctorId && appointmentData.appointmentDate) {
@@ -37,13 +37,13 @@ function BookAppointment({ appointmentData, setAppointmentData, handleBookAppoin
     }
     // eslint-disable-next-line
   }, [appointmentData.doctorId, appointmentData.appointmentDate]);
-
+ 
   function formatDate(dateStr) {
     // Converts yyyy-mm-dd to dd-MM-yyyy
     const [yyyy, mm, dd] = dateStr.split('-');
     return `${dd}-${mm}-${yyyy}`;
   }
-
+ 
   function handleDoctorSelect(doctor) {
     setSelectedDoctor(doctor);
     setAppointmentData({
@@ -52,22 +52,22 @@ function BookAppointment({ appointmentData, setAppointmentData, handleBookAppoin
       appointmentTime: ''
     });
   }
-
+ 
   function handleSlotSelect(slot) {
     setAppointmentData({
       ...appointmentData,
       appointmentTime: slot.startTime
     });
   }
-
+ 
   // Filter slots: for today, only show slots at least 30 minutes from now
   function filterSlots(slots) {
     const todayStr = new Date().toISOString().split('T')[0];
     if (appointmentData.appointmentDate !== todayStr) return slots;
-
+ 
     const now = new Date();
     now.setMinutes(now.getMinutes() + 30); // 30 minutes from now
-
+ 
     return slots.filter(slot => {
       // slot.startTime is in "HH:mm" format
       const [slotHour, slotMinute] = slot.startTime.split(':').map(Number);
@@ -76,7 +76,7 @@ function BookAppointment({ appointmentData, setAppointmentData, handleBookAppoin
       return slotDate >= now;
     });
   }
-
+ 
   return (
     <div className="content-card">
       <h3>Book New Appointment</h3>
@@ -90,7 +90,7 @@ function BookAppointment({ appointmentData, setAppointmentData, handleBookAppoin
             className="form-control"
           />
         </div>
-
+ 
         <div className="form-group">
           <label>Appointment Date:</label>
           <input
@@ -105,7 +105,7 @@ function BookAppointment({ appointmentData, setAppointmentData, handleBookAppoin
             className="form-control"
           />
         </div>
-
+ 
         {appointmentData.appointmentDate && (
           <div className="form-group">
             <label>Available Doctors</label>
@@ -146,7 +146,7 @@ function BookAppointment({ appointmentData, setAppointmentData, handleBookAppoin
             )}
           </div>
         )}
-
+ 
         {appointmentData.doctorId && (
           <div className="form-group">
             <label>Available Time Slots</label>
@@ -170,7 +170,7 @@ function BookAppointment({ appointmentData, setAppointmentData, handleBookAppoin
             )}
           </div>
         )}
-
+ 
         <button
           type="submit"
           className="book-button"
@@ -186,5 +186,6 @@ function BookAppointment({ appointmentData, setAppointmentData, handleBookAppoin
     </div>
   );
 }
-
+ 
 export default BookAppointment;
+ 
