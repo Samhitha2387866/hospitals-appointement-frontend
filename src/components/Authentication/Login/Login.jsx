@@ -35,14 +35,23 @@ const Login = () => {
         throw new Error(loginData.message || "Login failed");
       }
 
-      // After successful authentication, verify user type
-      const verifyUserType = await fetch(`https://localhost:7130/api/${userType === 'patient' ? 'PatientRegistration' : 'DoctorRegistration'}`, {
-        headers: {
-          'Authorization': `Bearer ${loginData.token}`,
-          'Accept': 'application/json'
-        }
-      });
+      // Display the token in the console
+      console.log("Token:", loginData.token);
 
+      // After successful authentication, verify user type
+      const verifyUserType = await fetch(
+        `https://localhost:7130/api/${userType === 'patient' ? 'PatientRegistration' : 'DoctorRegistration'}`,
+        {
+          headers: {
+            'Authorization': `Bearer ${loginData.token}`,
+            'Accept': 'application/json'
+          }
+        }
+      );
+      if (!verifyUserType.ok) {
+        const errorData = await verifyUserType.json();
+        throw new Error(errorData.message || `Failed to verify ${userType} account`);
+      }
       const userData = await verifyUserType.json();
       const user = userData.find(u => u.email.toLowerCase() === email.toLowerCase());
 
@@ -71,8 +80,8 @@ const Login = () => {
         <form onSubmit={handleLogin}>
           <div className="input-group">
             <label>User Type</label>
-            <select 
-              value={userType} 
+            <select
+              value={userType}
               onChange={(e) => setUserType(e.target.value)}
               disabled={isLoading}
             >
@@ -102,17 +111,23 @@ const Login = () => {
               placeholder="Enter your password"
             />
           </div>
-          <button 
-            type="submit" 
+          <button
+            type="submit"
             className="login-button"
             disabled={isLoading}
           >
             {isLoading ? "Logging in..." : "Login"}
           </button>
         </form>
+        {/* Only show Forgot Password for patient */}
+        {userType === "patient" && (
+          <p className="forgot-password-link">
+            <Link to="/forgot-password">Forgot Password?</Link>
+          </p>
+        )}
         {userType === "patient" && (
           <p className="sign-up">
-            Don't have an account? <Link to="/sign-up" className="link">Sign Up</Link>
+            Don't have an account? <Link to="/signUp" className="link">Sign Up</Link>
           </p>
         )}
       </div>

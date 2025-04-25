@@ -22,7 +22,6 @@ function Notifications({ patientId }) {
         }
 
         const data = await response.json();
-        console.log('Fetched data:', data);
         setNotifications(Array.isArray(data) ? data : []);
       } catch (err) {
         setError(err.message);
@@ -50,6 +49,9 @@ function Notifications({ patientId }) {
     return timeString.substring(0, 5); // Format HH:mm
   };
 
+  // Sort notifications by appointmentId in descending order
+  const sortedNotifications = [...notifications].sort((a, b) => b.appointmentId - a.appointmentId);
+
   if (loading) {
     return (
       <div className="notifications">
@@ -72,9 +74,9 @@ function Notifications({ patientId }) {
   return (
     <div className="notifications">
       <h2>Notifications</h2>
-      {notifications.length > 0 ? (
+      {sortedNotifications.length > 0 ? (
         <ul className="notifications-list">
-          {notifications.map((item) => (
+          {sortedNotifications.map((item) => (
             <li key={item.notificationId} className="notification-item">
               <div className="notification-card">
                 <p><strong>Appointment ID:</strong> {item.appointmentId}</p>

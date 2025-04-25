@@ -42,3 +42,14 @@
     font-weight: 500; /* Medium weight for distinction */
     font-size: 18px; /* Match font size with paragraph text */
 }
+.success-message {
+    margin-top: 20px;
+    color: #28a745;
+    background: #eafaf1;
+    border: 1px solid #28a745;
+    border-radius: 6px;
+    padding: 12px;
+    font-weight: bold;
+    text-align: center;
+    font-size: 1.1rem;
+  }

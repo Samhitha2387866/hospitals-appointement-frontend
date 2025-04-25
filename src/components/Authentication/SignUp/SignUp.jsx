@@ -12,11 +12,13 @@ const SignUp = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [success, setSuccess] = useState(""); // <-- Success message state
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
+    setSuccess("");
 
     // Client-side validation (example)
     if (!/^\S+@\S+\.\S+$/.test(email)) {
@@ -36,10 +38,14 @@ const SignUp = () => {
         role: "patient"
       });
 
-      alert("Registration successful!");
-      navigate("/login");
+      setSuccess("Registration successful! Redirecting to login...");
+      setError("");
+      setTimeout(() => {
+        navigate("/login");
+      }, 2000); // Redirect after 2 seconds
     } catch (error) {
       setError(error.response?.data?.message || "Registration failed");
+      setSuccess("");
     }
   };
 
@@ -47,7 +53,6 @@ const SignUp = () => {
     <div className="signup-container">
       <div className="signup-box">
         <h2>Register</h2>
-        {error && <p className="error-text">{error}</p>}
         <form onSubmit={handleSubmit}>
           <div className="input-group">
             <label>Patient Name</label>
@@ -114,6 +119,11 @@ const SignUp = () => {
           </div>
           <button type="submit" className="signup-button">Sign Up</button>
         </form>
+        {error && <p className="error-text">{error}</p>}
+        {success && <p className="success-text">{success}</p>}
+        <p className="login-link">
+          Already have an account? <a href="/login">Login</a>
+        </p>
       </div>
     </div>
   );

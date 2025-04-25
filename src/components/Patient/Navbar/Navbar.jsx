@@ -8,9 +8,6 @@ function Navbar({ activeSection, setActiveSection, handleLogout, patientName }) 
       <div className="navbar-brand">Cognizant Healthcare</div>
       <ul className="navbar-list">
         <li>
-          <button onClick={() => setActiveSection('profile')}>Profile</button>
-        </li>
-        <li>
           <button onClick={() => setActiveSection('book')}>Book Appointment</button>
         </li>
         <li>
@@ -18,6 +15,9 @@ function Navbar({ activeSection, setActiveSection, handleLogout, patientName }) 
         </li>
         <li>
           <button onClick={() => setActiveSection('notifications')}>Notifications</button>
+        </li>
+        <li>
+          <button onClick={() => setActiveSection('profile')}>Profile</button>
         </li>
         <li>
           <button className="logout-button" onClick={handleLogout}>Logout</button>

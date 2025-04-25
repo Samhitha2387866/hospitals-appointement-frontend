@@ -1,100 +1,137 @@
 /* src/components/auth/Login/Login.css */
-
+ 
+/* Add the header styling */
+.header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  padding: 20px;
+  background-color: #0066cc;
+  color: white;
+  font-size: 24px;
+  font-weight: bold;
+  z-index: 1000;
+}
+ 
 .login-container {
   display: flex;
+  flex-direction: column; /* Changed to column to accommodate header */
   justify-content: center;
   align-items: center;
-  height: 100vh;
-  background: linear-gradient(to right, #4facfe, #00f2fe);
-  font-family: 'Arial', sans-serif; /* Use a clean, modern font */
+  min-height: 100vh;
+  background: linear-gradient(135deg, #3b82f6 0%, #06b6d4 100%); /* Updated gradient to match screenshot */
+  font-family: 'Segoe UI', sans-serif;
+  padding-top: 60px; /* Add padding to account for fixed header */
 }
-
+ 
 .login-box {
   width: 100%;
   max-width: 400px;
-  padding: 40px; /* Increased padding for a more spacious feel */
+  padding: 40px;
   background-color: white;
-  border-radius: 12px; /* Slightly more rounded corners */
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2); /* Deeper shadow for depth */
+  border-radius: 12px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  text-align: left; /* Changed to left align to match screenshot */
+}
+ 
+.login-box h2 {
+  margin-bottom: 30px;
+  font-size: 24px;
+  color: #333;
+  font-weight: 600;
   text-align: center;
 }
-
-.login-box h2 {
-  margin-bottom: 20px; /* Increased margin for better spacing */
-  font-size: 2rem; /* Larger font size for the title */
-  color: #333;
-  font-weight: 600; /* Bolder font weight */
-}
-
-.login-box p {
-  margin-bottom: 20px;
-  font-size: 0.9rem; /* Slightly smaller font size for less important text */
-  color: #666; /* Softer color for less emphasis */
-}
-
+ 
 .input-group {
-  margin-bottom: 25px; /* Increased margin for better spacing */
-  text-align: left;
+  margin-bottom: 20px;
 }
-
+ 
 .input-group label {
   display: block;
-  margin-bottom: 8px; /* Increased margin for better spacing */
-  font-weight: 500; /* Medium font weight for labels */
-  color: #444; /* Darker color for better readability */
+  margin-bottom: 8px;
+  font-weight: 500;
+  color: #555;
 }
-
+ 
 .input-group select,
 .input-group input {
   width: 100%;
-  padding: 12px; /* Increased padding for comfort */
-  border: 1px solid #ccc;
-  border-radius: 6px; /* Slightly more rounded corners */
-  font-size: 1rem;
-  transition: border-color 0.3s ease; /* Smooth transition for focus */
+  padding: 12px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-size: 16px;
+  background-color: #f8f9fa;
 }
-
+ 
+/* Custom select styling to match screenshot */
+.input-group select {
+  appearance: none;
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  background-size: 16px;
+}
+ 
 .input-group input:focus,
 .input-group select:focus {
-  border-color: #4facfe; /* Highlight border on focus */
-  outline: none; /* Remove default outline */
+  outline: none;
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
 }
-
+ 
 .login-button {
   width: 100%;
   padding: 12px;
-  background-color: #4facfe;
+  background-color: #3b82f6;
   border: none;
-  border-radius: 6px; /* Slightly more rounded corners */
+  border-radius: 6px;
   color: white;
-  font-size: 1rem;
-  font-weight: bold; /* Bold text for emphasis */
+  font-size: 16px;
+  font-weight: 500;
   cursor: pointer;
-  transition: background-color 0.3s ease, transform 0.2s ease; /* Added transform for button effect */
+  transition: background-color 0.2s;
+  margin-top: 20px;
 }
-
+ 
 .login-button:hover {
-  background-color: #00c6ff;
-  transform: translateY(-2px); /* Slight lift effect on hover */
+  background-color: #2563eb;
+  transform: none; /* Removed lift effect to match screenshot */
 }
-
+ 
 .error-text {
-  color: #ff4d4d; /* Red color for error messages */
-  margin-bottom: 20px; /* Space below error message */
+  color: #dc2626;
+  margin-top: 10px;
+  text-align: center;
+  font-size: 14px;
 }
-
-.forgot-password,
+ 
 .sign-up {
-  margin-top: 15px; /* Space above links */
-  font-size: 0.9rem; /* Slightly smaller font size */
+  text-align: center;
+  margin-top: 20px;
+  color: #666;
 }
-
+ 
 .link {
-  color: #007bff;
+  color: #3b82f6;
   text-decoration: none;
-  font-weight: 500; /* Medium font weight for links */
+  font-weight: 500;
+  margin-left: 5px;
 }
-
+ 
 .link:hover {
   text-decoration: underline;
 }
+ 
+/* Responsive adjustments */
+@media (max-width: 480px) {
+  .login-box {
+    margin: 20px;
+    padding: 20px;
+  }
+ 
+  .header {
+    font-size: 20px;
+  }
+}
+ 

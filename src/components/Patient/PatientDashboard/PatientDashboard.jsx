@@ -8,9 +8,12 @@ import LoadingSpinner from '../../common/LoadingSpinner/LoadingSpinner';
 import Error from '../../common/Error/Error';
 import MedicalHistory from '../MedicalHistory/MEdicalHistory';
 import Notifications from '../Notifications/Notifications';
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function PatientDashboard() {
-  const [activeSection, setActiveSection] = useState('profile');
+  // Set default section to 'book'
+  const [activeSection, setActiveSection] = useState('book');
   const [patientData, setPatientData] = useState(null);
   const [doctors, setDoctors] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -64,7 +67,7 @@ function PatientDashboard() {
         }
 
         setPatientData(patient);
-        
+
         setAppointmentData(prev => ({
           ...prev,
           patientId: patient.patientId
@@ -97,16 +100,16 @@ function PatientDashboard() {
   const handleBookAppointment = async (e) => {
     e.preventDefault();
     const token = localStorage.getItem('token');
-  
+
     if (!appointmentData.doctorId || !appointmentData.appointmentDate || !appointmentData.appointmentTime) {
       alert('Please fill in all the required fields');
       return;
     }
-  
+
     try {
       const formattedDate = new Date(appointmentData.appointmentDate).toISOString().split('T')[0];
       const formattedTime = `${appointmentData.appointmentTime}:00`;
-  
+
       const bookingData = {
         doctorId: parseInt(appointmentData.doctorId, 10),
         patientId: parseInt(appointmentData.patientId, 10),
@@ -114,7 +117,7 @@ function PatientDashboard() {
         appointmentTime: formattedTime,
         status: 'Scheduled'
       };
-  
+
       const response = await fetch('https://localhost:7130/api/Appointments/book', {
         method: 'POST',
         headers: {
@@ -123,14 +126,14 @@ function PatientDashboard() {
         },
         body: JSON.stringify(bookingData)
       });
-  
+
       if (!response.ok) {
         const errorText = await response.text();
         throw new Error(`Failed to book appointment: ${errorText || response.statusText}`);
       }
-  
-      alert('Appointment booked successfully!');
-  
+
+      toast.success('Appointment booked successfully!');
+
       setAppointmentData(prev => ({
         ...prev,
         doctorId: '',
@@ -155,11 +158,11 @@ function PatientDashboard() {
     switch (activeSection) {
       case 'book':
         return (
-          <BookAppointment 
-            appointmentData={appointmentData} 
-            setAppointmentData={setAppointmentData} 
-            doctors={doctors} 
-            handleBookAppointment={handleBookAppointment} 
+          <BookAppointment
+            appointmentData={appointmentData}
+            setAppointmentData={setAppointmentData}
+            doctors={doctors}
+            handleBookAppointment={handleBookAppointment}
           />
         );
 
@@ -182,20 +185,20 @@ function PatientDashboard() {
 
   return (
     <div className="patient-dashboard">
-      <Navbar 
-        activeSection={activeSection} 
-        setActiveSection={setActiveSection} 
-        handleLogout={handleLogout} 
+      <Navbar
+        activeSection={activeSection}
+        setActiveSection={setActiveSection}
+        handleLogout={handleLogout}
         patientName={patientData ? patientData.name : 'Patient'}
       />
-  
+
       <div className="main-content-wrapper">
         <div className="marquee-container">
           <div className="marquee-text">
             Welcome to the Patient Dashboard - Book your appointments easily
           </div>
         </div>
-  
+
         <div className="main-content">
           {renderContent()}
         </div>

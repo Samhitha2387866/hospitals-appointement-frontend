@@ -89,3 +89,8 @@
     font-size: 0.9rem;
     color: #555;
   }
+  .success-text {
+    color: #28a745;
+    margin-bottom: 20px;
+    font-weight: bold;
+  }

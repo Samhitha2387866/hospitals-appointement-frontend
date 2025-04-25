@@ -42,3 +42,26 @@
 .submit-button:hover {
   background-color: #45a049;
 }
+.success-message {
+  margin-top: 20px;
+  color: #28a745;
+  background: #eafaf1;
+  border: 1px solid #28a745;
+  border-radius: 6px;
+  padding: 12px;
+  font-weight: bold;
+  text-align: center;
+  font-size: 1.1rem;
+}
+
+.error-message {
+  margin-top: 20px;
+  color: #dc3545;
+  background: #fbeaea;
+  border: 1px solid #dc3545;
+  border-radius: 6px;
+  padding: 12px;
+  font-weight: bold;
+  text-align: center;
+  font-size: 1.1rem;
+}

@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import './TimeSlots.css';
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css"; 
 
 function AddTimeSlots({ doctorId }) {
   const [availabilityData, setAvailabilityData] = useState({
@@ -7,9 +9,12 @@ function AddTimeSlots({ doctorId }) {
     startTime: '',
     endTime: '',
   });
+  const [error, setError] = useState('');
 
   const handleAddTimeSlot = async (e) => {
     e.preventDefault();
+  
+    setError('');
     const token = localStorage.getItem('token');
 
     try {
@@ -28,18 +33,18 @@ function AddTimeSlots({ doctorId }) {
       });
 
       if (response.ok) {
-        alert('Time slot added successfully');
+        toast.success('Time slot added successfully!');
         setAvailabilityData({
           availableDate: '',
           startTime: '',
           endTime: '',
         });
       } else {
-        alert('Failed to add time slot');
+        setError('Failed to add time slot');
       }
     } catch (error) {
       console.error('Error:', error);
-      alert('Failed to add time slot');
+      setError('Failed to add time slot');
     }
   };
 
@@ -52,6 +57,7 @@ function AddTimeSlots({ doctorId }) {
           <input
             type="date"
             value={availabilityData.availableDate}
+            min={new Date().toISOString().split('T')[0]}
             onChange={(e) => setAvailabilityData({
               ...availabilityData,
               availableDate: e.target.value
@@ -85,6 +91,7 @@ function AddTimeSlots({ doctorId }) {
         </div>
         <button type="submit" className="submit-button">Add Time Slot</button>
       </form>
+      {error && <div className="error-message">{error}</div>}
     </div>
   );
 }

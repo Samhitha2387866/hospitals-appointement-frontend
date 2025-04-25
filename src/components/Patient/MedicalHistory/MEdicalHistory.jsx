@@ -4,25 +4,23 @@ import './MedicalHistory.css';
 
 function MedicalHistory({ patientId }) {
   const [medicalHistory, setMedicalHistory] = useState([]);
+  const [doctorDetails, setDoctorDetails] = useState({});
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
+  // Fetch medical history
   useEffect(() => {
     const fetchMedicalHistory = async () => {
       try {
         const response = await fetch(`https://localhost:7130/api/MedicalHistory/ByPatient/${patientId}`);
-        
         if (response.status === 404) {
           setMedicalHistory([]);
           return;
         }
-
         if (!response.ok) {
           throw new Error('An error occurred while fetching medical history');
         }
-
         const data = await response.json();
-        console.log('Fetched data:', data);
         setMedicalHistory(Array.isArray(data) ? data : []);
       } catch (err) {
         setError(err.message);
@@ -39,6 +37,52 @@ function MedicalHistory({ patientId }) {
       setError('Invalid patient ID');
     }
   }, [patientId]);
+
+  // Fetch doctor details (name and specialization) for unique doctorIds
+  useEffect(() => {
+    const fetchDoctorDetails = async () => {
+      const uniqueDoctorIds = [
+        ...new Set(medicalHistory.map((item) => item.doctorId)),
+      ].filter(Boolean);
+
+      const newDoctorDetails = { ...doctorDetails };
+
+      await Promise.all(
+        uniqueDoctorIds.map(async (doctorId) => {
+          if (!newDoctorDetails[doctorId]) {
+            try {
+              const res = await fetch(
+                `https://localhost:7130/api/DoctorRegistration/${doctorId}`
+              );
+              if (res.ok) {
+                const docData = await res.json();
+                newDoctorDetails[doctorId] = {
+                  doctorName: docData.doctorName || `Dr. ${doctorId}`,
+                  specialization: docData.specialization || 'N/A',
+                };
+              } else {
+                newDoctorDetails[doctorId] = {
+                  doctorName: `Dr. ${doctorId}`,
+                  specialization: 'N/A',
+                };
+              }
+            } catch {
+              newDoctorDetails[doctorId] = {
+                doctorName: `Dr. ${doctorId}`,
+                specialization: 'N/A',
+              };
+            }
+          }
+        })
+      );
+      setDoctorDetails(newDoctorDetails);
+    };
+
+    if (medicalHistory.length > 0) {
+      fetchDoctorDetails();
+    }
+    // eslint-disable-next-line
+  }, [medicalHistory]);
 
   const formatDate = (dateString) => {
     const date = new Date(dateString);
@@ -72,8 +116,14 @@ function MedicalHistory({ patientId }) {
           {medicalHistory.map((item) => (
             <li key={item.id} className="history-item">
               <div className="history-card">
-                <p><strong>Patient Name:</strong> {item.patientName}</p>
-                <p><strong>Doctor ID:</strong> {item.doctorId}</p>
+                <p>
+                  <strong>Doctor Name:</strong>{' '}
+                  {doctorDetails[item.doctorId]?.doctorName || `Dr. ${item.doctorId}`}
+                </p>
+                <p>
+                  <strong>Specialization:</strong>{' '}
+                  {doctorDetails[item.doctorId]?.specialization || 'N/A'}
+                </p>
                 <p><strong>Visit Date:</strong> {formatDate(item.visitDate)}</p>
                 <p><strong>Treatment:</strong> {item.treatment}</p>
                 <p><strong>Medicines Prescribed:</strong> {item.medicines_prescribed}</p>

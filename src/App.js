@@ -1,4 +1,6 @@
 import React from "react";
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Home from "./components/Home/Home";
 import Login from "./components/Authentication/Login/Login";
@@ -12,7 +14,9 @@ import ProtectedRoute from "./components/common/ProtectedRoute/ProtectedRoute";
 import DoctorProfile from "./components/Doctor/DoctorProfile/DoctorProfile";
 import PrivacyPolicy from "./components/PrivacyPolicy/PrivacyPolicy";
 import TermsOfService from "./components/TermsOfService/TermsOfService";
-
+import AddMedicalHistory from "./components/Doctor/AddMedicalHistory/AddMedicalHistory";
+import ForgotPassword from "./components/Authentication/ForgotPassword/ForgotPassword";
+ 
 const router = createBrowserRouter([
   {
     path: "/",
@@ -21,6 +25,10 @@ const router = createBrowserRouter([
   {
     path: "/login",
     element: <Login />,
+  },
+  {
+    path: "/forgot-password",
+    element: <ForgotPassword />,
   },
   {
     path: "/signup",
@@ -91,6 +99,14 @@ const router = createBrowserRouter([
     ),
   },
   {
+    path: "/doctor-dashboard/add-medical-history",
+    element: (
+      <ProtectedRoute userType="doctor">
+        <AddMedicalHistory />
+      </ProtectedRoute>
+    ),
+  },
+  {
     path: "/privacy",
     element: <PrivacyPolicy />,
   },
@@ -108,9 +124,18 @@ const router = createBrowserRouter([
     v7_startTransition: true,
   },
 });
-
+ 
 function App() {
-  return <RouterProvider router={router} />;
+  return (
+    <div className="App">
+      {/* Other components */}
+      <RouterProvider router={router} />
+      
+      {/* ToastContainer for notifications */}
+      <ToastContainer position="top-right" autoClose={3000} />
+    </div>
+  );
 }
-
+ 
 export default App;
+ 

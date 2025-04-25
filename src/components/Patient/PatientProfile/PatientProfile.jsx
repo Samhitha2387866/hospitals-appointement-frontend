@@ -14,10 +14,6 @@ function Profile({ patientData }) {
         </div>
         <div className="profile-details-grid">
           <div className="detail-box">
-            <div className="detail-label">Patient ID</div>
-            <div className="detail-value">{patientData?.patientId}</div>
-          </div>
-          <div className="detail-box">
             <div className="detail-label">Name</div>
             <div className="detail-value">{patientData?.patientName}</div>
           </div>

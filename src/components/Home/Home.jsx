@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import './Home.css';
-
+ 
 function Home() {
   return (
     <div className="home-container">
@@ -14,16 +14,15 @@ function Home() {
           <Link to="/login" className="nav-link">Login</Link>
         </div>
       </nav>
-
+ 
       {/* Hero Section */}
       <header className="hero-section">
         <div className="hero-content">
           <h1>Welcome to Cognizant Healthcare</h1>
           <p>Your health, our priority. Experience world-class healthcare services with us.</p>
-          <Link to="/signup" className="hero-button">Get Started</Link>
         </div>
       </header>
-
+ 
       {/* About Section */}
       <section className="about-hospital">
         <h2>About Our Hospital</h2>
@@ -33,7 +32,7 @@ function Home() {
           is our mission.
         </p>
       </section>
-
+ 
       {/* Facilities Section */}
       <section className="facilities-section">
         <h2>Explore Our Facilities</h2>
@@ -60,7 +59,7 @@ function Home() {
           </div>
         </div>
       </section>
-
+ 
       {/* Testimonials Section */}
       <section className="testimonials-section">
         <h2>What Our Patients Say</h2>
@@ -79,7 +78,7 @@ function Home() {
           </div>
         </div>
       </section>
-
+ 
       {/* Footer Section */}
       <footer className="footer">
         <p>&copy; 2025 Cognizant Healthcare. All rights reserved.</p>
@@ -91,5 +90,6 @@ function Home() {
     </div>
   );
 }
-
+ 
 export default Home;
+ 
