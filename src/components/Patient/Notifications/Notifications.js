@@ -1,4 +1,3 @@
-// src/components/patient/Notifications/Notifications.jsx
 import React, { useState, useEffect } from 'react';
 import './Notifications.css';
 
@@ -11,7 +10,7 @@ function Notifications({ patientId }) {
     const fetchNotifications = async () => {
       try {
         const response = await fetch(`https://localhost:7130/api/Notifications/patient/${patientId}`);
-        
+
         if (response.status === 404) {
           setNotifications([]);
           return;
@@ -25,7 +24,7 @@ function Notifications({ patientId }) {
         setNotifications(Array.isArray(data) ? data : []);
       } catch (err) {
         setError(err.message);
-        console.error('Error fetching data:', err);
+        console.error('Error fetching notifications:', err);
       } finally {
         setLoading(false);
       }
@@ -46,7 +45,7 @@ function Notifications({ patientId }) {
 
   const formatTime = (timeString) => {
     if (!timeString) return 'Not specified';
-    return timeString.substring(0, 5); // Format HH:mm
+    return timeString.substring(0, 5); // Format as HH:mm
   };
 
   // Sort notifications by appointmentId in descending order
@@ -79,10 +78,16 @@ function Notifications({ patientId }) {
           {sortedNotifications.map((item) => (
             <li key={item.notificationId} className="notification-item">
               <div className="notification-card">
-                <p><strong>Appointment ID:</strong> {item.appointmentId}</p>
-                <p><strong>Doctor ID:</strong> {item.doctorId}</p>
-                <p><strong>Appointment Date:</strong> {formatDate(item.appointmentDate)}</p>
-                <p><strong>Appointment Time:</strong> {formatTime(item.appointmentTime)}</p>
+                {item.customMessage ? (
+                  <p style={{ fontWeight: "bold", color: "#d35400" }}>{item.customMessage}</p>
+                ) : (
+                  <>
+                    <p><strong>Appointment ID:</strong> {item.appointmentId}</p>
+                    <p><strong>Doctor ID:</strong> {item.doctorId}</p>
+                    <p><strong>Appointment Date:</strong> {formatDate(item.appointmentDate)}</p>
+                    <p><strong>Appointment Time:</strong> {formatTime(item.appointmentTime)}</p>
+                  </>
+                )}
               </div>
             </li>
           ))}

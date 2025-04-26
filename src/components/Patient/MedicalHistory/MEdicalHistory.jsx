@@ -1,4 +1,3 @@
-// src/components/patient/MedicalHistory/MedicalHistory.jsx
 import React, { useState, useEffect } from 'react';
 import './MedicalHistory.css';
 
@@ -15,13 +14,25 @@ function MedicalHistory({ patientId }) {
         const response = await fetch(`https://localhost:7130/api/MedicalHistory/ByPatient/${patientId}`);
         if (response.status === 404) {
           setMedicalHistory([]);
+          setError('No medical history found for this patient.');
           return;
         }
         if (!response.ok) {
           throw new Error('An error occurred while fetching medical history');
         }
         const data = await response.json();
-        setMedicalHistory(Array.isArray(data) ? data : []);
+        // Sort so that the most recent (by visitDate, then id) are first
+        if (Array.isArray(data)) {
+          data.sort((a, b) => {
+            const dateDiff = new Date(b.visitDate) - new Date(a.visitDate);
+            if (dateDiff !== 0) return dateDiff;
+            // Optionally break ties using 'id' (descending)
+            return (b.id || 0) - (a.id || 0);
+          });
+          setMedicalHistory(data);
+        } else {
+          setMedicalHistory([]);
+        }
       } catch (err) {
         setError(err.message);
         console.error('Error fetching data:', err);
@@ -45,43 +56,40 @@ function MedicalHistory({ patientId }) {
         ...new Set(medicalHistory.map((item) => item.doctorId)),
       ].filter(Boolean);
 
-      const newDoctorDetails = { ...doctorDetails };
+      const newDoctorDetails = {};
 
       await Promise.all(
         uniqueDoctorIds.map(async (doctorId) => {
-          if (!newDoctorDetails[doctorId]) {
-            try {
-              const res = await fetch(
-                `https://localhost:7130/api/DoctorRegistration/${doctorId}`
-              );
-              if (res.ok) {
-                const docData = await res.json();
-                newDoctorDetails[doctorId] = {
-                  doctorName: docData.doctorName || `Dr. ${doctorId}`,
-                  specialization: docData.specialization || 'N/A',
-                };
-              } else {
-                newDoctorDetails[doctorId] = {
-                  doctorName: `Dr. ${doctorId}`,
-                  specialization: 'N/A',
-                };
-              }
-            } catch {
+          try {
+            const res = await fetch(
+              `https://localhost:7130/api/DoctorRegistration/${doctorId}`
+            );
+            if (res.ok) {
+              const docData = await res.json();
+              newDoctorDetails[doctorId] = {
+                doctorName: docData.doctorName || `Dr. ${doctorId}`,
+                specialization: docData.specialization || 'N/A',
+              };
+            } else {
               newDoctorDetails[doctorId] = {
                 doctorName: `Dr. ${doctorId}`,
                 specialization: 'N/A',
               };
             }
+          } catch {
+            newDoctorDetails[doctorId] = {
+              doctorName: `Dr. ${doctorId}`,
+              specialization: 'N/A',
+            };
           }
         })
       );
-      setDoctorDetails(newDoctorDetails);
+      setDoctorDetails((prevDetails) => ({ ...prevDetails, ...newDoctorDetails }));
     };
 
     if (medicalHistory.length > 0) {
       fetchDoctorDetails();
     }
-    // eslint-disable-next-line
   }, [medicalHistory]);
 
   const formatDate = (dateString) => {

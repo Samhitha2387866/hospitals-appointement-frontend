@@ -1,23 +1,24 @@
 import React, { useState, useEffect } from 'react';
 import './PatientDashboard.css';
 import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
+
 import Navbar from '../Navbar/Navbar';
-import Profile from '../PatientProfile/PatientProfile';
 import BookAppointment from '../BookAppointment/BookAppointment';
-import LoadingSpinner from '../../common/LoadingSpinner/LoadingSpinner';
-import Error from '../../common/Error/Error';
 import MedicalHistory from '../MedicalHistory/MEdicalHistory';
 import Notifications from '../Notifications/Notifications';
-import { toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+import Profile from '../PatientProfile/PatientProfile';
+import MyAppointments from '../MyAppointments/MyAppointments';
+
+import LoadingSpinner from '../../common/LoadingSpinner/LoadingSpinner';
+import Error from '../../common/Error/Error';
 
 function PatientDashboard() {
-  // Set default section to 'book'
   const [activeSection, setActiveSection] = useState('book');
   const [patientData, setPatientData] = useState(null);
   const [doctors, setDoctors] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const [error, setError] = useState(""); // Error is always a string
   const [appointmentData, setAppointmentData] = useState({
     doctorId: '',
     patientId: '',
@@ -27,123 +28,107 @@ function PatientDashboard() {
 
   const navigate = useNavigate();
 
+  // Fetch patient profile & doctor list on mount
   useEffect(() => {
-    const fetchInitialData = async () => {
+    async function fetchInitialData() {
       const token = localStorage.getItem('token');
       const userType = localStorage.getItem('userType');
       const userEmail = localStorage.getItem('userEmail');
-
-      if (!token || !userEmail) {
-        navigate('/login');
-        return;
-      }
-
-      // First, verify that this is actually a patient
-      if (userType !== 'patient') {
+      if (!token || !userEmail || userType !== 'patient') {
         localStorage.clear();
         navigate('/login');
         return;
       }
 
       try {
-        const patientResponse = await fetch('https://localhost:7130/api/PatientRegistration', {
-          headers: {
-            'Authorization': `Bearer ${token}`,
-            'Accept': 'application/json'
+        // Get patient details
+        const resp1 = await fetch('https://localhost:7130/api/PatientRegistration', {
+          headers: { 
+            'Authorization': `Bearer ${token}`, 
+            'Accept': 'application/json' 
           }
         });
+        if (!resp1.ok) throw new Error('Failed to fetch patient details');
+        const patients = await resp1.json();
+        const me = patients.find(p => p.email.toLowerCase() === userEmail.toLowerCase());
+        if (!me) throw new Error('Patient account not found');
 
-        if (!patientResponse.ok) {
-          throw new Error('Failed to fetch patient details');
-        }
-
-        const patientsData = await patientResponse.json();
-        const patient = patientsData.find(p => p.email.toLowerCase() === userEmail.toLowerCase());
-
-        if (!patient) {
-          localStorage.clear();
-          navigate('/login');
-          throw new Error('Patient account not found');
-        }
-
-        setPatientData(patient);
-
-        setAppointmentData(prev => ({
-          ...prev,
-          patientId: patient.patientId
+        setPatientData(me);
+        setAppointmentData(ad => ({
+          ...ad,
+          patientId: me.patientId
         }));
 
-        const doctorsResponse = await fetch('https://localhost:7130/api/DoctorRegistration', {
-          headers: {
-            'Authorization': `Bearer ${token}`,
-            'Accept': 'application/json'
+        // Get doctor list
+        const resp2 = await fetch('https://localhost:7130/api/DoctorRegistration', {
+          headers: { 
+            'Authorization': `Bearer ${token}`, 
+            'Accept': 'application/json' 
           }
         });
-
-        if (!doctorsResponse.ok) throw new Error('Failed to fetch doctors');
-        const doctorsData = await doctorsResponse.json();
-        setDoctors(doctorsData);
-
-      } catch (err) {
+        if (!resp2.ok) throw new Error('Failed to fetch doctors');
+        setDoctors(await resp2.json());
+      }
+      catch (err) {
+        setError(err.message); // Always set as string
         localStorage.clear();
-        setError(err.message);
-        console.error('Error:', err);
         navigate('/login');
-      } finally {
+      }
+      finally {
         setLoading(false);
       }
-    };
-
+    }
     fetchInitialData();
   }, [navigate]);
 
-  const handleBookAppointment = async (e) => {
+  // Book appointment handler
+  const handleBookAppointment = async e => {
     e.preventDefault();
+    setError(""); // Reset error each time
     const token = localStorage.getItem('token');
-
     if (!appointmentData.doctorId || !appointmentData.appointmentDate || !appointmentData.appointmentTime) {
-      alert('Please fill in all the required fields');
+      toast.error('Please select date, doctor and time.');
       return;
     }
-
     try {
-      const formattedDate = new Date(appointmentData.appointmentDate).toISOString().split('T')[0];
+      const formattedDate = new Date(appointmentData.appointmentDate)
+        .toISOString().split('T')[0];
       const formattedTime = `${appointmentData.appointmentTime}:00`;
 
-      const bookingData = {
-        doctorId: parseInt(appointmentData.doctorId, 10),
-        patientId: parseInt(appointmentData.patientId, 10),
+      const body = {
+        doctorId: +appointmentData.doctorId,
+        patientId: +appointmentData.patientId,
         appointmentDate: formattedDate,
         appointmentTime: formattedTime,
         status: 'Scheduled'
       };
 
-      const response = await fetch('https://localhost:7130/api/Appointments/book', {
+      const res = await fetch('https://localhost:7130/api/Appointments/book', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`
         },
-        body: JSON.stringify(bookingData)
+        body: JSON.stringify(body)
       });
 
-      if (!response.ok) {
-        const errorText = await response.text();
-        throw new Error(`Failed to book appointment: ${errorText || response.statusText}`);
+      if (!res.ok) {
+        const txt = await res.text();
+        throw new Error(txt || res.statusText);
       }
 
-      toast.success('Appointment booked successfully!');
-
-      setAppointmentData(prev => ({
-        ...prev,
+      toast.success('Appointment booked successfully');
+      setAppointmentData(ad => ({
+        ...ad,
         doctorId: '',
         appointmentDate: '',
         appointmentTime: ''
       }));
-      setActiveSection('profile');
-    } catch (error) {
-      console.error('Booking error:', error.message);
-      alert(`An error occurred while booking the appointment: ${error.message}`);
+      setActiveSection('myAppointments');
+    }
+    catch (err) {
+      setError(err.message); // Always set as string
+      toast.error(`Booking failed: ${err.message}`);
     }
   };
 
@@ -154,34 +139,31 @@ function PatientDashboard() {
 
   const renderContent = () => {
     if (!patientData) return null;
-
     switch (activeSection) {
       case 'book':
         return (
           <BookAppointment
             appointmentData={appointmentData}
             setAppointmentData={setAppointmentData}
-            doctors={doctors}
             handleBookAppointment={handleBookAppointment}
+            doctors={doctors}
           />
         );
-
-      case 'profile':
-        return <Profile patientData={patientData} />;
-
+      case 'myAppointments':
+        return <MyAppointments patientId={patientData.patientId} />;
       case 'medicalHistory':
         return <MedicalHistory patientId={patientData.patientId} />;
-
       case 'notifications':
         return <Notifications patientId={patientData.patientId} />;
-
+      case 'profile':
+        return <Profile patientData={patientData} />;
       default:
         return null;
     }
   };
 
   if (loading) return <LoadingSpinner />;
-  if (error) return <Error message={error} />;
+  if (error)   return <Error message={error} />;
 
   return (
     <div className="patient-dashboard">
@@ -189,16 +171,15 @@ function PatientDashboard() {
         activeSection={activeSection}
         setActiveSection={setActiveSection}
         handleLogout={handleLogout}
-        patientName={patientData ? patientData.name : 'Patient'}
+        patientName={patientData && patientData.name}
       />
 
       <div className="main-content-wrapper">
         <div className="marquee-container">
           <div className="marquee-text">
-            Welcome to the Patient Dashboard - Book your appointments easily
+            Welcome to Cognizant Healthcare{patientData && `, ${patientData.name}`}!
           </div>
         </div>
-
         <div className="main-content">
           {renderContent()}
         </div>
