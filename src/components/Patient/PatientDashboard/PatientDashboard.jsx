@@ -84,7 +84,7 @@ function PatientDashboard() {
   // Book appointment handler
   const handleBookAppointment = async e => {
     e.preventDefault();
-    setError(""); // Reset error each time
+    setError(""); 
     const token = localStorage.getItem('token');
     if (!appointmentData.doctorId || !appointmentData.appointmentDate || !appointmentData.appointmentTime) {
       toast.error('Please select date, doctor and time.');

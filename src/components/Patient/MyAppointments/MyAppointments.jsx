@@ -48,7 +48,6 @@ function MyAppointments({ patientId }) {
   const now = new Date();
   const upcomingAppointments = appointments.filter(a => {
     if (!a.appointmentDate || !a.appointmentTime) return false;
-    // Ensure proper ISO string e.g. "2024-05-29T15:30:00"
     const appointmentDateTime = new Date(
       a.appointmentDate + 'T' + (
         a.appointmentTime.length === 5

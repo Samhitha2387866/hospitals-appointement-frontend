@@ -69,7 +69,6 @@ function BookAppointment({ appointmentData, setAppointmentData, handleBookAppoin
     now.setMinutes(now.getMinutes() + 30); // 30 minutes from now
  
     return slots.filter(slot => {
-      // slot.startTime is in "HH:mm" format
       const [slotHour, slotMinute] = slot.startTime.split(':').map(Number);
       const slotDate = new Date(appointmentData.appointmentDate);
       slotDate.setHours(slotHour, slotMinute, 0, 0);

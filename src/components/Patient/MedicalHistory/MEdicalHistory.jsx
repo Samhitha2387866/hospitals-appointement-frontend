@@ -5,28 +5,25 @@ function MedicalHistory({ patientId }) {
   const [medicalHistory, setMedicalHistory] = useState([]);
   const [doctorDetails, setDoctorDetails] = useState({});
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
 
   // Fetch medical history
   useEffect(() => {
     const fetchMedicalHistory = async () => {
       try {
         const response = await fetch(`https://localhost:7130/api/MedicalHistory/ByPatient/${patientId}`);
-        if (response.status === 404) {
+        
+        if (!response.ok) {
           setMedicalHistory([]);
-          setError('No medical history found for this patient.');
+          setLoading(false);
           return;
         }
-        if (!response.ok) {
-          throw new Error('An error occurred while fetching medical history');
-        }
+        
         const data = await response.json();
-        // Sort so that the most recent (by visitDate, then id) are first
         if (Array.isArray(data)) {
+          // Sort so that the most recent (by visitDate, then id) are first
           data.sort((a, b) => {
             const dateDiff = new Date(b.visitDate) - new Date(a.visitDate);
             if (dateDiff !== 0) return dateDiff;
-            // Optionally break ties using 'id' (descending)
             return (b.id || 0) - (a.id || 0);
           });
           setMedicalHistory(data);
@@ -34,8 +31,8 @@ function MedicalHistory({ patientId }) {
           setMedicalHistory([]);
         }
       } catch (err) {
-        setError(err.message);
         console.error('Error fetching data:', err);
+        setMedicalHistory([]);
       } finally {
         setLoading(false);
       }
@@ -45,7 +42,6 @@ function MedicalHistory({ patientId }) {
       fetchMedicalHistory();
     } else {
       setLoading(false);
-      setError('Invalid patient ID');
     }
   }, [patientId]);
 
@@ -101,17 +97,6 @@ function MedicalHistory({ patientId }) {
     return (
       <div className="medical-history">
         <div className="loading-spinner">Loading...</div>
-      </div>
-    );
-  }
-
-  if (error) {
-    return (
-      <div className="medical-history">
-        <div className="error-message">
-          <h2>Error</h2>
-          <p>{error}</p>
-        </div>
       </div>
     );
   }

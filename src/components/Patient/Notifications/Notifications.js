@@ -82,8 +82,6 @@ function Notifications({ patientId }) {
                   <p style={{ fontWeight: "bold", color: "#d35400" }}>{item.customMessage}</p>
                 ) : (
                   <>
-                    <p><strong>Appointment ID:</strong> {item.appointmentId}</p>
-                    <p><strong>Doctor ID:</strong> {item.doctorId}</p>
                     <p><strong>Appointment Date:</strong> {formatDate(item.appointmentDate)}</p>
                     <p><strong>Appointment Time:</strong> {formatTime(item.appointmentTime)}</p>
                   </>

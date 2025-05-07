@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './ScheduledAppointments.css';
-
+ 
 function ScheduledAppointments({ doctorId }) {
   const [appointments, setAppointments] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const navigate = useNavigate();
-
+ 
   useEffect(() => {
     const fetchAppointments = async () => {
       const token = localStorage.getItem('token');
@@ -20,7 +20,7 @@ function ScheduledAppointments({ doctorId }) {
             }
           }
         );
-
+ 
         if (response.ok) {
           const data = await response.json();
           // Filter appointments from today onwards
@@ -42,12 +42,12 @@ function ScheduledAppointments({ doctorId }) {
         setLoading(false);
       }
     };
-
+ 
     if (doctorId) {
       fetchAppointments();
     }
   }, [doctorId]);
-
+ 
   const handleAddMedicalHistory = (appointment) => {
     navigate('/doctor-dashboard/add-medical-history', {
       state: {
@@ -58,7 +58,7 @@ function ScheduledAppointments({ doctorId }) {
       }
     });
   };
-
+ 
   // Helper function to check if appointment is done (in the past)
   function isAppointmentDone(appointment) {
     // Combine date and time into a single Date object
@@ -68,10 +68,10 @@ function ScheduledAppointments({ doctorId }) {
     const now = new Date();
     return appDate <= now;
   }
-
+ 
   if (loading) return <div className="loading">Loading appointments...</div>;
   if (error) return <div className="error">{error}</div>;
-
+ 
   return (
     <div className="appointments-section">
       <h4>Your Appointments</h4>
@@ -114,5 +114,6 @@ function ScheduledAppointments({ doctorId }) {
     </div>
   );
 }
-
+ 
 export default ScheduledAppointments;
+ 

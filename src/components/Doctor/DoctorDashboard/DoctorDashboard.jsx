@@ -70,7 +70,7 @@ function DoctorDashboard() {
         <div className="navbar-buttons">
           <button onClick={() => setActiveSection('appointments')}>Appointments</button>
           <button onClick={() => setActiveSection('add-slots')}>Add Time Slots</button>
-          <button onClick={() => setActiveSection('review-slots')}>Review Time Slots</button>
+          <button onClick={() => setActiveSection('review-slots')}>View Time Slots</button>
           <button onClick={() => setActiveSection('profile')} >Profile</button>
         </div>
         <button className="logout-button" onClick={handleLogout}>Logout</button>
@@ -101,4 +101,5 @@ function DoctorDashboard() {
 }
  
 export default DoctorDashboard;
+ 
  
